@@ -4,16 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bd2cea8c-c9c3-40d5-9c1f-b851620ed597" name="Changes" comment="init">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="bd2cea8c-c9c3-40d5-9c1f-b851620ed597" name="Changes" comment="running w local txt files">
+      <change afterPath="$PROJECT_DIR$/rag_system/server.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rag_system/config/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/rag_system/config/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rag_system/core/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/rag_system/core/database.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rag_system/core/generation.py" beforeDir="false" afterPath="$PROJECT_DIR$/rag_system/core/generation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rag_system/core/ingestion.py" beforeDir="false" afterPath="$PROJECT_DIR$/rag_system/core/ingestion.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rag_system/core/retrieval.py" beforeDir="false" afterPath="$PROJECT_DIR$/rag_system/core/retrieval.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rag_system/main_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/rag_system/main_app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rag_system/main_ingest.py" beforeDir="false" afterPath="$PROJECT_DIR$/rag_system/main_ingest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rag_system/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/rag_system/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,6 +55,7 @@
     "Python.ingestion.executor": "Run",
     "Python.main_app.executor": "Run",
     "Python.main_ingest.executor": "Run",
+    "Python.server.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
     "RunOnceActivity.git.unshallow": "true",
@@ -107,11 +103,20 @@
       <option name="project" value="LOCAL" />
       <updated>1770549362595</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="running w local txt files">
+      <option name="closed" value="true" />
+      <created>1770553872975</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1770553872976</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="init" />
-    <option name="LAST_COMMIT_MESSAGE" value="init" />
+    <MESSAGE value="running w local txt files" />
+    <option name="LAST_COMMIT_MESSAGE" value="running w local txt files" />
   </component>
 </project>
