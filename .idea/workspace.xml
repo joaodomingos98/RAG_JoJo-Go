@@ -5,15 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bd2cea8c-c9c3-40d5-9c1f-b851620ed597" name="Changes" comment="init">
-      <change afterPath="$PROJECT_DIR$/rag_system/config/settings.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rag_system/core/database.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rag_system/core/generation.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rag_system/core/ingestion.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rag_system/core/retrieval.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rag_system/main_app.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rag_system/main_ingest.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/rag_system/requirements.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rag_system/core/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/rag_system/core/database.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rag_system/core/generation.py" beforeDir="false" afterPath="$PROJECT_DIR$/rag_system/core/generation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rag_system/core/ingestion.py" beforeDir="false" afterPath="$PROJECT_DIR$/rag_system/core/ingestion.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rag_system/core/retrieval.py" beforeDir="false" afterPath="$PROJECT_DIR$/rag_system/core/retrieval.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rag_system/main_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/rag_system/main_app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rag_system/main_ingest.py" beforeDir="false" afterPath="$PROJECT_DIR$/rag_system/main_ingest.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rag_system/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/rag_system/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,15 +56,22 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Python.generation.executor": "Run",
+    "Python.ingestion.executor": "Run",
     "Python.main_app.executor": "Run",
+    "Python.main_ingest.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true"
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/User/PyCharmProjects/AI_MAGIC/rag_system/data"
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\User\PyCharmProjects\AI_MAGIC\rag_system\data" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\User\PyCharmProjects\AI_MAGIC\rag_system" />
     </key>
@@ -92,7 +99,15 @@
       <option name="project" value="LOCAL" />
       <updated>1770546861626</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="init">
+      <option name="closed" value="true" />
+      <created>1770549362595</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1770549362595</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">

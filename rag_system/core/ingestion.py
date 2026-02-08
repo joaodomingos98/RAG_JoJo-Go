@@ -1,24 +1,65 @@
-
-# ========================================
-# DOCUMENT LOADING & CHUNKING
-# ========================================
-
+import os
+import glob
+from typing import List, Dict, Any
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-def load_and_chunk_documents():
-    """
-    Load sample policy documents and chunk them for better retrieval.
 
-    This section demonstrates:
-    - Document loading from sample data
-    - Text chunking using LangChain
-    - Chunk size and overlap configuration
-    """
-    print("📚 SECTION 1: DOCUMENT LOADING & CHUNKING")
-    print("=" * 50)
+# ========================================
+# DATA LOADING
+# ========================================
 
-    # Sample policy documents (same as previous labs)
-    policy_documents = [
+def load_text_files_from_directory(directory_path: str) -> List[Dict[str, str]]:
+    """
+    Scans a directory for .txt files and loads their content.
+    """
+    print(f"\n📂 Scanning directory for TXT files: {directory_path}")
+
+    # Check if directory exists
+    if not os.path.exists(directory_path):
+        print(f"❌ Error: Directory '{directory_path}' does not exist.")
+        return []
+
+    # Find all .txt files
+    txt_files = glob.glob(os.path.join(directory_path, "*.txt"))
+
+    if not txt_files:
+        print("⚠️  No .txt files found in this directory.")
+        return []
+
+    print(f"📄 Found {len(txt_files)} text files.")
+
+    raw_documents = []
+
+    for txt_file in txt_files:
+        try:
+            print(f"   Processing: {os.path.basename(txt_file)}")
+
+            # Read the text file
+            with open(txt_file, 'r', encoding='utf-8') as f:
+                content = f.read()
+
+            # Create document object
+            doc_id = os.path.basename(txt_file).replace(".txt", "")
+
+            raw_documents.append({
+                "id": doc_id,
+                "title": doc_id.replace("_", " ").title(),
+                "content": content,
+                "category": "uploaded_text",
+                "source_doc": os.path.basename(txt_file)
+            })
+
+        except Exception as e:
+            print(f"❌ Error reading {txt_file}: {e}")
+
+    return raw_documents
+
+
+def get_demo_documents() -> List[Dict[str, str]]:
+    """
+    Returns hardcoded policy documents for the demo.
+    """
+    return [
         {
             "id": "policy_001",
             "title": "Home Office Equipment Reimbursement",
@@ -51,30 +92,78 @@ def load_and_chunk_documents():
         }
     ]
 
-    print(f"📄 Loaded {len(policy_documents)} policy documents")
 
-    # Configure text splitter (same as chunking lab)
+# ========================================
+# CHUNKING LOGIC
+# ========================================
+
+def split_documents(documents: List[Dict[str, str]]) -> List[Dict[str, Any]]:
+    """
+    Splits raw text documents into smaller chunks for the Vector DB.
+    """
+    if not documents:
+        return []
+
+    print(f"\n✂️  Splitting {len(documents)} documents...")
+
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=200,  # What is the chunk size?
-        chunk_overlap=50,  # What is the overlap?
+        chunk_size=1000,  # Good size for general text
+        chunk_overlap=200,  # Overlap helps keep context at boundaries
         length_function=len,
-        separators=["\n\n", "\n", " ", ""]
+        separators=["\n\n", "\n", ". ", " ", ""]
     )
 
-    # Chunk all documents
     all_chunks = []
-    for doc in policy_documents:
+
+    for doc in documents:
+        # Split the content
         chunks = text_splitter.split_text(doc["content"])
-        for i, chunk in enumerate(chunks):
+
+        for i, chunk_text in enumerate(chunks):
             all_chunks.append({
                 "id": f"{doc['id']}_chunk_{i}",
-                "title": doc["title"],
-                "content": chunk,
-                "category": doc["category"],
-                "source_doc": doc["id"]
+                "title": doc.get("title", "Untitled"),
+                "content": chunk_text,
+                "category": doc.get("category", "General"),
+                "source_doc": doc.get("source_doc", "unknown")
             })
 
-    print(f"✂️ Created {len(all_chunks)} chunks from {len(policy_documents)} documents")
-    print(f"📏 Average chunk size: {sum(len(chunk['content']) for chunk in all_chunks) // len(all_chunks)} characters")
-
+    print(f"✅ Generated {len(all_chunks)} chunks.")
     return all_chunks
+
+
+# ========================================
+# MAIN ORCHESTRATOR
+# ========================================
+
+def load_and_chunk_documents(data_dir="./data"):
+    """
+    Main function to load docs from disk and chunk them.
+    If no files are found in data_dir, it falls back to demo data.
+    """
+    print("\n📚 SECTION: DOCUMENT LOADING & CHUNKING")
+    print("=" * 50)
+
+    # 1. Try loading real TXT files
+    raw_docs = load_text_files_from_directory(data_dir)
+
+    # 2. Fallback to Demo Data if directory is empty or missing
+    if not raw_docs:
+        print("\n⚠️  No text files found. Loading DEMO data instead...")
+        raw_docs = get_demo_documents()
+
+    # 3. Chunk whatever we found
+    return split_documents(raw_docs)
+
+
+# Allow running this file directly to test it
+if __name__ == "__main__":
+    # Create a dummy file to test
+    if not os.path.exists("./data"):
+        os.makedirs("./data")
+        with open("./data/test_policy.txt", "w") as f:
+            f.write("This is a test policy for the python system.")
+
+    chunks = load_and_chunk_documents("./data")
+    if chunks:
+        print(f"\nExample Chunk:\n{chunks[0]}")

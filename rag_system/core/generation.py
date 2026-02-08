@@ -2,6 +2,7 @@
 # CONTEXT AUGMENTATION
 # ========================================
 from typing import List, Dict, Any
+import ollama
 
 def augment_prompt_with_context(query: str, search_results: List[Dict]) -> str:
     """
@@ -19,7 +20,10 @@ def augment_prompt_with_context(query: str, search_results: List[Dict]) -> str:
     # Assemble context from search results
     context_parts = []
     for i, result in enumerate(search_results, 1):
-        context_parts.append(f"Source {i}: {result['metadata']['title']}\n{result['content']}")
+        # Fallback if 'title' or 'content' keys might be missing
+        title = result.get('metadata', {}).get('title', f"Source {i}")
+        content = result.get('content', '')
+        context_parts.append(f"Source {i}: {title}\n{content}")
 
     context = "\n\n".join(context_parts)
 
@@ -28,17 +32,20 @@ def augment_prompt_with_context(query: str, search_results: List[Dict]) -> str:
 
     # Build augmented prompt
     augmented_prompt = f"""
-Based on the following company policies, answer the user's question.
-
-POLICIES:
-{context}
-
-QUESTION: {query}
-
-Please provide a clear, accurate answer based on the policies above.
-If the information is not available in the policies, say so.
-Include relevant policy details and any limitations or requirements.
-"""
+    You are a helpful assistant for a private company. 
+    Use the following context to answer the user's question.
+        
+    CONTEXT:
+    {context}
+    
+    USER QUESTION: 
+    {query}
+    
+    INSTRUCTIONS:
+    - Answer strictly based on the provided context.
+    - If the answer is not in the context, state "I cannot answer this based on the provided documents."
+    - Be concise and professional.
+    """
 
     print(f"📝 Augmented prompt length: {len(augmented_prompt)} characters")
     print(f"🔗 Context sources: {[result['metadata']['title'] for result in search_results]}")
@@ -49,38 +56,41 @@ Include relevant policy details and any limitations or requirements.
 # SECTION 6: RESPONSE GENERATION
 # ========================================================================================================================
 
-def generate_response(augmented_prompt: str) -> str:
+def generate_response(augmented_prompt: str, model_name: str = "llama3.2") -> str:
     """
-    Generate response using LLM (simulated for demo).
+    Generate response using a local Ollama model.
 
-    This section demonstrates:
-    - LLM integration (simulated)
-    - Response formatting
-    - Answer synthesis
-    - Output structure
+    Args:
+        augmented_prompt: The full prompt with context.
+        model_name: The name of the model to use (default: "llama3")
     """
     print("\n🤖 SECTION 6: RESPONSE GENERATION")
     print("=" * 50)
+    print(f"⚙️  Connecting to Ollama (Model: {model_name})...")
 
-    # Simulate LLM processing time
-    print("⏳ Processing with LLM...")
+    try:
+        # Call the Ollama API
+        response_object = ollama.chat(
+            model=model_name,
+            messages=[
+                {
+                    'role': 'user',
+                    'content': augmented_prompt
+                },
+            ],
+            options={
+                'temperature': 0.1  # Low temperature for factual RAG responses
+            }
+        )
 
-    # Simulate LLM response (in production, this would call OpenAI/Anthropic/etc.)
-    response = f"""
-Based on the company policies provided, here's the answer to your question:
+        # Extract the actual text content
+        generated_text = response_object['message']['content']
 
-The relevant policies contain information about various company guidelines and procedures. 
-The retrieved context provides specific details that can help answer your question.
+        print(f"✅ Generated response length: {len(generated_text)} characters")
+        return generated_text
 
-Key points from the policies:
-- Multiple policy sources were consulted
-- Information is current and accurate
-- Specific requirements and limitations are included
-
-Please refer to the specific policy documents for complete details and any recent updates.
-"""
-
-    print(f"✅ Generated response length: {len(response)} characters")
-    print(f"📋 Response includes: Policy references, key points, limitations")
-
-    return response
+    except  Exception as e:
+        error_msg = f"❌ Error connecting to Ollama: {str(e)}"
+        print(error_msg)
+        print("💡 Tip: Is 'ollama serve' running? Did you run 'ollama pull llama3'?")
+        return "System Error: Could not generate response."

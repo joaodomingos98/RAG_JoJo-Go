@@ -1,36 +1,50 @@
+from sentence_transformers import SentenceTransformer
+import numpy as np
+from typing import List, Any
+
+# Global variable to store the model in memory
+_EMBEDDING_MODEL = None
+
+def get_embedding_model():
+    """
+    Singleton pattern to load the model only once.
+    """
+    global _EMBEDDING_MODEL
+    if _EMBEDDING_MODEL is None:
+        print("⚙️  Loading embedding model (this happens only once)...")
+        # You can swap this for 'all-mpnet-base-v2' for better quality (but slower)
+        _EMBEDDING_MODEL = SentenceTransformer('all-MiniLM-L6-v2')
+    return _EMBEDDING_MODEL
+
 # ========================================
 # QUERY PROCESSING
 # ========================================
 
-from sentence_transformers import SentenceTransformer
-
-def process_user_query(query: str):
+def process_user_query(query: str) -> List[float]:
     """
     Process user query and convert to embedding for vector search.
 
-    This section demonstrates:
-    - Query preprocessing
-    - Embedding model usage
-    - Vector conversion
-    - Query optimization
+    Returns:
+        List[float]: The vector embedding of the query.
     """
-    print("\n🔍 SECTION 3: QUERY PROCESSING")
+    print("\n🔍 SECTION: QUERY PROCESSING")
     print("=" * 50)
 
-    # Load embedding model (what model is used?)
-    model = SentenceTransformer('all-MiniLM-L6-v2')  # What embedding model is used?
+    # 1. Get the cached model
+    model = get_embedding_model()
 
-    print(f"🤖 Using model: {model}")
-    print(f"📐 Embedding dimensions: {model.get_sentence_embedding_dimension()}")
-
-    # Preprocess query
+    # 2. Preprocess query (Basic cleaning)
     cleaned_query = query.lower().strip()
-    print(f"📝 Original query: '{query}'")
-    print(f"🧹 Cleaned query: '{cleaned_query}'")
 
-    # Convert query to embedding
-    query_embedding = model.encode([cleaned_query])
-    print(f"🔢 Query embedding shape: {query_embedding.shape}")
-    print(f"📊 Embedding sample: {query_embedding[0][:5]}...")
+    # 3. Generate Embedding
+    # encode() returns a numpy array. We convert to list for JSON/DB compatibility.
+    query_embedding = model.encode(cleaned_query)
 
-    return model, query_embedding[0]
+    # Convert numpy array to python list
+    if isinstance(query_embedding, np.ndarray):
+        query_embedding = query_embedding.tolist()
+
+    print(f"📝 Query: '{cleaned_query}'")
+    print(f"🔢 Vector Dimensions: {len(query_embedding)}")
+
+    return query_embedding

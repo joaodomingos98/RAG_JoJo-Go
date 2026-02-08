@@ -1,84 +1,114 @@
-# ========================================
-# VECTOR DATABASE SETUP
-# ========================================
-
 import chromadb
+import os
+from chromadb.config import Settings
 from typing import List, Dict, Any
 
-def setup_vector_database(chunks: List[Dict]):
-    """
-    Set up ChromaDB vector database and store document chunks.
+# Define where the DB will be saved on your disk
+PERSIST_DIRECTORY = "./chroma_db_data"
 
-    This section demonstrates:
-    - ChromaDB client initialization
-    - Collection creation
-    - Document embedding and storage
-    - Vector database configuration
+
+def get_db_client():
     """
-    print("\n🗄️ SECTION 2: VECTOR DATABASE SETUP")
+    Returns a persistent ChromaDB client.
+    """
+    # Check if the directory exists, creating it if necessary (optional but good practice)
+    if not os.path.exists(PERSIST_DIRECTORY):
+        os.makedirs(PERSIST_DIRECTORY)
+
+    client = chromadb.PersistentClient(path=PERSIST_DIRECTORY)
+    return client
+
+
+def get_or_create_collection(client, name="techcorp_policies"):
+    """
+    Gets the collection if it exists, or creates it if it doesn't.
+    """
+    return client.get_or_create_collection(
+        name=name,
+        metadata={"hnsw:space": "cosine"}
+    )
+
+
+# ========================================
+# VECTOR DATABASE INGESTION (Write)
+# ========================================
+
+def store_chunks_in_db(chunks: List[Dict]):
+    """
+    Store document chunks in the persistent Vector DB.
+    """
+    print("\n🗄️ SECTION: VECTOR DATABASE STORAGE")
     print("=" * 50)
 
-    # Initialize ChromaDB client
-    client = chromadb.Client()
+    client = get_db_client()
+    collection = get_or_create_collection(client)
 
-    # Create collection (what is the collection name?)
-    try:
-        collection = client.create_collection(
-            name="techcorp_policies",  # What is the collection name?
-            metadata={"hnsw:space": "cosine"}  # What similarity metric is used?
-        )
-    except Exception:
-        # Collection already exists, get it
-        collection = client.get_collection("techcorp_policies")
+    print(f"🗄️  Using Collection: {collection.name}")
+    print(f"📂  Persist Directory: {PERSIST_DIRECTORY}")
 
-    print(f"🗄️ Created collection: {collection.name}")
-    print(f"📊 Similarity metric: {collection.metadata['hnsw:space']}")
-
-    # Prepare data for storage
+    # Prepare data
     ids = [chunk["id"] for chunk in chunks]
     documents = [chunk["content"] for chunk in chunks]
-    metadatas = [{"title": chunk["title"], "category": chunk["category"], "source": chunk["source_doc"]} for chunk in
-                 chunks]
+    metadatas = [
+        {
+            "title": chunk["title"],
+            "category": chunk["category"],
+            "source": chunk.get("source_doc", "unknown")
+        }
+        for chunk in chunks
+    ]
 
-    # Add documents to collection (embeddings will be generated automatically)
-    if collection.count() == 0:
-        collection.add(
-            ids=ids,
-            documents=documents,
-            metadatas=metadatas
-        )
-        print(f"✅ Stored {len(chunks)} chunks in vector database")
-    else:
-        print(f"✅ Collection already contains {collection.count()} chunks")
+    # Check for duplicates or just add (Chroma handles IDs efficiently)
+    # Ideally, you check if IDs exist to avoid duplication if you re-run ingestion
+    existing_count = collection.count()
 
-    print(f"📈 Collection count: {collection.count()}")
+    # Upsert (Update or Insert) is safer than Add if you might run this multiple times
+    collection.upsert(
+        ids=ids,
+        documents=documents,
+        metadatas=metadatas
+    )
+
+    new_count = collection.count()
+    print(f"✅  Added/Updated {len(ids)} chunks.")
+    print(f"📈  Total Collection count: {new_count}")
 
     return collection
 
-# ========================================================================================================================
-# VECTOR SEARCH
-# ========================================================================================================================
 
-def search_vector_database(collection, query_embedding, top_k: int = 3):
+# ========================================
+# VECTOR SEARCH (Read)
+# ========================================
+
+def search_vector_database(query_embedding: List[float], top_k: int = 3):
     """
     Search vector database for relevant document chunks.
-
-    This section demonstrates:
-    - Vector similarity search
-    - Result ranking and filtering
-    - Similarity scoring
-    - Top-k result selection
+    Note: We don't pass 'collection' in; we load it here.
     """
-    print("\n🔍 SECTION 4: VECTOR SEARCH")
+    print("\n🔍 SECTION: VECTOR SEARCH")
     print("=" * 50)
 
+    # Re-connect to the SAME persistent DB
+    client = get_db_client()
+    collection = get_or_create_collection(client)
+
     # Perform vector search
+    # Ensure query_embedding is a list, not a numpy array, as Chroma expects lists sometimes
+    if hasattr(query_embedding, 'tolist'):
+        query_embedding = query_embedding.tolist()
+
     results = collection.query(
-        query_embeddings=[query_embedding.tolist()],
-        n_results=top_k  # How many results are returned?
+        query_embeddings=[query_embedding],
+        n_results=top_k
     )
 
     print(f"🎯 Searching for top {top_k} results")
+
+    # Handle case where no results are found
+    if not results['ids'] or len(results['ids'][0]) == 0:
+        print("⚠️  No relevant chunks found.")
+        return []
+
     print(f"📊 Found {len(results['ids'][0])} relevant chunks")
 
     # Process and display results
@@ -89,7 +119,10 @@ def search_vector_database(collection, query_embedding, top_k: int = 3):
             results['documents'][0],
             results['metadatas'][0]
     )):
-        similarity = 1 - distance  # Convert distance to similarity
+        # Cosine distance: 0 is identical, 1 is opposite.
+        # Similarity = 1 - distance is a common approximation.
+        similarity = 1 - distance
+
         search_results.append({
             'id': doc_id,
             'content': content,
@@ -97,8 +130,8 @@ def search_vector_database(collection, query_embedding, top_k: int = 3):
             'similarity': similarity
         })
 
-        print(f"\n{i + 1}. {metadata['title']} (Category: {metadata['category']})")
+        print(f"\n{i + 1}. {metadata.get('title', 'Untitled')} (Category: {metadata.get('category', 'General')})")
         print(f"   Similarity: {similarity:.3f}")
-        print(f"   Content: {content[:100]}...")
+        # print(f"   Content: {content[:100]}...") # Uncomment to see preview
 
     return search_results
