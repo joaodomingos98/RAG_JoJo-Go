@@ -4,11 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bd2cea8c-c9c3-40d5-9c1f-b851620ed597" name="Changes" comment="running w local txt files">
-      <change afterPath="$PROJECT_DIR$/rag_system/server.py" afterDir="false" />
+    <list default="true" id="bd2cea8c-c9c3-40d5-9c1f-b851620ed597" name="Changes" comment="configurations init, left to update the rest of the files">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rag_system/config/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/rag_system/config/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rag_system/core/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/rag_system/core/database.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rag_system/core/generation.py" beforeDir="false" afterPath="$PROJECT_DIR$/rag_system/core/generation.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,12 +110,30 @@
       <option name="project" value="LOCAL" />
       <updated>1770553872976</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="future openwebui integration">
+      <option name="closed" value="true" />
+      <created>1770556093130</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1770556093130</updated>
+    </task>
+    <task id="LOCAL-00005" summary="configurations init, left to update the rest of the files">
+      <option name="closed" value="true" />
+      <created>1770560567518</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1770560567518</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="init" />
     <MESSAGE value="running w local txt files" />
-    <option name="LAST_COMMIT_MESSAGE" value="running w local txt files" />
+    <MESSAGE value="future openwebui integration" />
+    <MESSAGE value="configurations init, left to update the rest of the files" />
+    <option name="LAST_COMMIT_MESSAGE" value="configurations init, left to update the rest of the files" />
   </component>
 </project>

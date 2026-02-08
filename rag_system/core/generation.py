@@ -45,6 +45,7 @@ def augment_prompt_with_context(query: str, search_results: List[Dict]) -> str:
     - Answer strictly based on the provided context.
     - If the answer is not in the context, state "I cannot answer this based on the provided documents."
     - Be concise and professional.
+    - If relevant: go outside your prompt and use all the information you know outside of the context given.
     """
 
     print(f"📝 Augmented prompt length: {len(augmented_prompt)} characters")

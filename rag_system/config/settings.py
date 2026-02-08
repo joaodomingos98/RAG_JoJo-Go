@@ -37,6 +37,7 @@ LLM_TEMPERATURE = 0.1  # Low temperature = more factual/deterministic
 COLLECTION_NAME = "techcorp_policies"
 VECTOR_SEARCH_TOP_K = 3
 
+# Distance algorithm
 
 # =============================================================================
 # CHUNKING CONFIGURATION
