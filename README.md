@@ -1,4 +1,4 @@
-# 🚀 TechCorp PolicyCopilot (Local RAG System)
+# ✨ AI MAGIC - Local RAG System for PolicyCopiloting
 
 A private, secure, and local Retrieval-Augmented Generation (RAG) system designed to answer questions about internal company documents using AI. 
 
