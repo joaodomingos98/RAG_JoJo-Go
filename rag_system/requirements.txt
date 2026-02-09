@@ -2,3 +2,4 @@ chromadb
 sentence-transformers
 ollama
 langchain-text-splitters
+python==3.12
