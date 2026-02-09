@@ -54,12 +54,12 @@ The system is split into two distinct pipelines to ensure performance:
 
 Before you begin, ensure you have the following installed:
 
-1.  **Python 3.10+**
+1.  **Python 3.12**
 2.  **[Ollama](https://ollama.com/)** (Running in the background)
     * Install Ollama from the official website.
     * Pull the model we are using:
         ```bash
-        ollama pull llama3
+        ollama pull llama3.2
         ```
 
 ---
