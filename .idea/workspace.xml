@@ -4,10 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bd2cea8c-c9c3-40d5-9c1f-b851620ed597" name="Changes" comment="configurations init, left to update the rest of the files">
+    <list default="true" id="bd2cea8c-c9c3-40d5-9c1f-b851620ed597" name="Changes" comment="update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rag_system/config/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/rag_system/config/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rag_system/core/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/rag_system/core/database.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rag_system/core/generation.py" beforeDir="false" afterPath="$PROJECT_DIR$/rag_system/core/generation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rag_system/core/ingestion.py" beforeDir="false" afterPath="$PROJECT_DIR$/rag_system/core/ingestion.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rag_system/core/retrieval.py" beforeDir="false" afterPath="$PROJECT_DIR$/rag_system/core/retrieval.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rag_system/main_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/rag_system/main_app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rag_system/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/rag_system/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,6 +76,58 @@
       <recent name="C:\Users\User\PyCharmProjects\AI_MAGIC\rag_system" />
     </key>
   </component>
+  <component name="RunManager" selected="Python.main_app">
+    <configuration name="main_app" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="AI_MAGIC" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/rag_system" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/rag_system/main_app.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="main_ingest" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="AI_MAGIC" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/rag_system" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/rag_system/main_ingest.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.main_app" />
+        <item itemvalue="Python.main_ingest" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -126,7 +183,15 @@
       <option name="project" value="LOCAL" />
       <updated>1770560567518</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="update">
+      <option name="closed" value="true" />
+      <created>1770568447725</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1770568447725</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -134,6 +199,7 @@
     <MESSAGE value="running w local txt files" />
     <MESSAGE value="future openwebui integration" />
     <MESSAGE value="configurations init, left to update the rest of the files" />
-    <option name="LAST_COMMIT_MESSAGE" value="configurations init, left to update the rest of the files" />
+    <MESSAGE value="update" />
+    <option name="LAST_COMMIT_MESSAGE" value="update" />
   </component>
 </project>

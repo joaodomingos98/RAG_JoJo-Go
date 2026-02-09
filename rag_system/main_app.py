@@ -32,7 +32,7 @@ def run_rag_pipeline(query: str):
     augmented_prompt = augment_prompt_with_context(query, search_results)
 
     # Step 4: Generate Response (using Ollama)
-    response = generate_response(augmented_prompt, model_name="llama3.2")
+    response = generate_response(augmented_prompt)
 
     print("\n🤖 AI Answer:")
     print(response)

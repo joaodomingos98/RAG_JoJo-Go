@@ -1,96 +1,58 @@
 import chromadb
 import os
-from chromadb.config import Settings
 from typing import List, Dict, Any
-
-# Define where the DB will be saved on your disk
-PERSIST_DIRECTORY = "./chroma_db_data"
+from config import settings  # <--- IMPORT SETTINGS
 
 
 def get_db_client():
-    """
-    Returns a persistent ChromaDB client.
-    """
-    # Check if the directory exists, creating it if necessary (optional but good practice)
-    if not os.path.exists(PERSIST_DIRECTORY):
-        os.makedirs(PERSIST_DIRECTORY)
+    """Returns a persistent ChromaDB client using path from settings."""
+    # Convert Path object to string for Chroma
+    db_path = str(settings.CHROMA_DB_DIR)
 
-    client = chromadb.PersistentClient(path=PERSIST_DIRECTORY)
+    client = chromadb.PersistentClient(path=db_path)
     return client
 
 
-def get_or_create_collection(client, name="techcorp_policies"):
-    """
-    Gets the collection if it exists, or creates it if it doesn't.
-    """
+def get_collection(client):
+    """Gets collection using name from settings."""
     return client.get_or_create_collection(
-        name=name,
+        name=settings.COLLECTION_NAME,  # <--- FROM SETTINGS
         metadata={"hnsw:space": "cosine"}
     )
 
 
 # ========================================
-# VECTOR DATABASE INGESTION (Write)
+# STORAGE (Write)
 # ========================================
-
 def store_chunks_in_db(chunks: List[Dict]):
-    """
-    Store document chunks in the persistent Vector DB.
-    """
-    print("\n🗄️ SECTION: VECTOR DATABASE STORAGE")
-    print("=" * 50)
-
     client = get_db_client()
-    collection = get_or_create_collection(client)
+    collection = get_collection(client)
 
-    print(f"🗄️  Using Collection: {collection.name}")
-    print(f"📂  Persist Directory: {PERSIST_DIRECTORY}")
+    print(f"🗄️  Persisting to: {settings.CHROMA_DB_DIR}")
 
-    # Prepare data
     ids = [chunk["id"] for chunk in chunks]
     documents = [chunk["content"] for chunk in chunks]
-    metadatas = [
-        {
-            "title": chunk["title"],
-            "category": chunk["category"],
-            "source": chunk.get("source_doc", "unknown")
-        }
-        for chunk in chunks
-    ]
+    metadatas = [{"title": c["title"], "source": c["source_doc"]} for c in chunks]
 
-    # Check for duplicates or just add (Chroma handles IDs efficiently)
-    # Ideally, you check if IDs exist to avoid duplication if you re-run ingestion
-    existing_count = collection.count()
-
-    # Upsert (Update or Insert) is safer than Add if you might run this multiple times
-    collection.upsert(
-        ids=ids,
-        documents=documents,
-        metadatas=metadatas
-    )
-
-    new_count = collection.count()
-    print(f"✅  Added/Updated {len(ids)} chunks.")
-    print(f"📈  Total Collection count: {new_count}")
-
-    return collection
-
+    collection.upsert(ids=ids, documents=documents, metadatas=metadatas)
+    print(f"✅  Stored {len(ids)} chunks in '{settings.COLLECTION_NAME}'")
 
 # ========================================
 # VECTOR SEARCH (Read)
 # ========================================
 
-def search_vector_database(query_embedding: List[float], top_k: int = 3):
+def search_vector_database(query_embedding: List[float], top_k: int = settings.VECTOR_SEARCH_TOP_K):
     """
     Search vector database for relevant document chunks.
     Note: We don't pass 'collection' in; we load it here.
     """
+
     print("\n🔍 SECTION: VECTOR SEARCH")
     print("=" * 50)
 
     # Re-connect to the SAME persistent DB
     client = get_db_client()
-    collection = get_or_create_collection(client)
+    collection = get_collection(client)
 
     # Perform vector search
     # Ensure query_embedding is a list, not a numpy array, as Chroma expects lists sometimes

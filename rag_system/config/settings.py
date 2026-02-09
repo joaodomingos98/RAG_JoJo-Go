@@ -27,7 +27,7 @@ EMBEDDING_MODEL_NAME = "all-MiniLM-L6-v2"
 # EMBEDDING_MODEL_NAME = "all-mpnet-base-v2" # Better quality, slower
 
 # LLM Model (Ollama)
-LLM_MODEL_NAME = "llama3"
+LLM_MODEL_NAME = "llama3.2"
 LLM_TEMPERATURE = 0.1  # Low temperature = more factual/deterministic
 
 
@@ -37,10 +37,15 @@ LLM_TEMPERATURE = 0.1  # Low temperature = more factual/deterministic
 COLLECTION_NAME = "techcorp_policies"
 VECTOR_SEARCH_TOP_K = 3
 
-# Distance algorithm
-
 # =============================================================================
 # CHUNKING CONFIGURATION
 # =============================================================================
 CHUNK_SIZE = 1000
 CHUNK_OVERLAP = 200
+
+# =============================================================================
+#❗NOT IMPLEMENTED (requires altering search function)❗
+# Distance Metric Configuration
+# =============================================================================
+# D - Options: "cosine" (Default for text), "l2" (Euclidean), "ip" (Inner Product)
+DISTANCE_METRIC = "cosine"

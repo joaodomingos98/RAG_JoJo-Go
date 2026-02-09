@@ -3,6 +3,7 @@
 # ========================================
 from typing import List, Dict, Any
 import ollama
+from config import settings
 
 def augment_prompt_with_context(query: str, search_results: List[Dict]) -> str:
     """
@@ -57,22 +58,21 @@ def augment_prompt_with_context(query: str, search_results: List[Dict]) -> str:
 # SECTION 6: RESPONSE GENERATION
 # ========================================================================================================================
 
-def generate_response(augmented_prompt: str, model_name: str = "llama3.2") -> str:
+def generate_response(augmented_prompt: str) -> str:
     """
-    Generate response using a local Ollama model.
+    Generate response using model defined in settings.
 
     Args:
         augmented_prompt: The full prompt with context.
-        model_name: The name of the model to use (default: "llama3")
     """
     print("\n🤖 SECTION 6: RESPONSE GENERATION")
     print("=" * 50)
-    print(f"⚙️  Connecting to Ollama (Model: {model_name})...")
+    print(f"⚙️  Connecting to Ollama (Model: {settings.LLM_MODEL_NAME})...")
 
     try:
         # Call the Ollama API
         response_object = ollama.chat(
-            model=model_name,
+            model = settings.LLM_MODEL_NAME,
             messages=[
                 {
                     'role': 'user',
@@ -80,7 +80,7 @@ def generate_response(augmented_prompt: str, model_name: str = "llama3.2") -> st
                 },
             ],
             options={
-                'temperature': 0.1  # Low temperature for factual RAG responses
+                'temperature': settings.LLM_TEMPERATURE  # Temperature defines how factual RAG responses are
             }
         )
 

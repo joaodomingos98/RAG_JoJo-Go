@@ -1,19 +1,15 @@
 from sentence_transformers import SentenceTransformer
 import numpy as np
-from typing import List, Any
+from typing import List
+from config import settings  # <--- IMPORT SETTINGS
 
-# Global variable to store the model in memory
 _EMBEDDING_MODEL = None
 
 def get_embedding_model():
-    """
-    Singleton pattern to load the model only once.
-    """
     global _EMBEDDING_MODEL
     if _EMBEDDING_MODEL is None:
-        print("⚙️  Loading embedding model (this happens only once)...")
-        # You can swap this for 'all-mpnet-base-v2' for better quality (but slower)
-        _EMBEDDING_MODEL = SentenceTransformer('all-MiniLM-L6-v2')
+        print(f"⚙️  Loading embedding model: {settings.EMBEDDING_MODEL_NAME}...")
+        _EMBEDDING_MODEL = SentenceTransformer(settings.EMBEDDING_MODEL_NAME)
     return _EMBEDDING_MODEL
 
 # ========================================
