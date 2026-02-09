@@ -121,12 +121,11 @@ All settings are centralized in `rag_system/config/settings.py`. You can modify:
 
 | Setting | Description | Default |
 | :--- | :--- | :--- |
-| `LLM_MODEL_NAME` | The Ollama model to use | `llama3` |
+| `LLM_MODEL_NAME` | The Ollama model to use | `llama3.2` |
 | `EMBEDDING_MODEL` | The HuggingFace model for vectors | `all-MiniLM-L6-v2` |
 | `CHUNK_SIZE` | Size of text chunks (in chars) | `1000` |
-| `DISTANCE_METRIC` | Similarity math (`cosine`, `l2`, `ip`) | `cosine` |
 
-**Note:** If you change `CHUNK_SIZE`, `EMBEDDING_MODEL`, or `DISTANCE_METRIC`, you must delete the `chroma_db_data` folder and re-run `python ingest_data.py`.
+**Note:** If you change `CHUNK_SIZE`, `EMBEDDING_MODEL`, you must delete the `chroma_db_data` folder and re-run `python ingest_data.py`.
 
 ---
 
