@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bd2cea8c-c9c3-40d5-9c1f-b851620ed597" name="Changes" comment="loads all documents (img, pdf, doc) in data folder to vector database">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rag_system/config/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/rag_system/config/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rag_system/main_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/rag_system/main_app.py" afterDir="false" />
-    </list>
+    <list default="true" id="bd2cea8c-c9c3-40d5-9c1f-b851620ed597" name="Changes" comment="counts number of s answer took to generate" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -228,7 +224,23 @@
       <option name="project" value="LOCAL" />
       <updated>1771185259948</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="loads all documents (img, pdf, doc) in data folder to vector database">
+      <option name="closed" value="true" />
+      <created>1771185962959</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1771185962959</updated>
+    </task>
+    <task id="LOCAL-00013" summary="counts number of s answer took to generate">
+      <option name="closed" value="true" />
+      <created>1771185987431</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1771185987431</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -241,7 +253,8 @@
     <MESSAGE value="updated requirements" />
     <MESSAGE value="dowloading models locally" />
     <MESSAGE value="loads all documents (img, pdf, doc) in data folder to vector database" />
-    <option name="LAST_COMMIT_MESSAGE" value="loads all documents (img, pdf, doc) in data folder to vector database" />
+    <MESSAGE value="counts number of s answer took to generate" />
+    <option name="LAST_COMMIT_MESSAGE" value="counts number of s answer took to generate" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
