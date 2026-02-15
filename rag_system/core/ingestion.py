@@ -2,11 +2,13 @@ import os
 import glob
 import fitz  # PyMuPDF
 import docx
+import hashlib
 from pathlib import Path
 from PIL import Image
 from typing import List, Dict, Any
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from rapidocr_onnxruntime import RapidOCR
+from tqdm import tqdm
 from config import settings
 
 # Initialize OCR Engine once (It's very fast to load)
@@ -101,19 +103,32 @@ def process_txt(file_path: str) -> str:
 
 
 # ========================================
-# MAIN LOADER (Recursive & Categorized)
+# HELPER: DEDUPLICATION
+# ========================================
+
+def generate_chunk_hash(content: str) -> str:
+    """
+    Generates a unique hash for a text string.
+    Used to detect duplicate chunks across different files.
+    """
+    # Normalize text (remove extra whitespace) to catch near-duplicates
+    cleaned_text = " ".join(content.split())
+    return hashlib.md5(cleaned_text.encode('utf-8')).hexdigest()
+
+
+# ========================================
+# MAIN LOADER
 # ========================================
 
 def load_documents(directory_path: str = settings.DATA_DIR) -> List[Dict[str, str]]:
-    """
-    Recursively loads documents from the data directory.
-    Assigns 'category' based on the folder name holding the file.
-    """
     raw_documents = []
     base_path = Path(directory_path)
 
-    # Map extensions to their processor functions
-    # Make sure these functions (process_pdf, etc.) are defined above in your file
+    # 1. First, find all valid files to verify count for progress bar
+    # (We scan first so tqdm knows the total)
+    print(f"\n📂 Scanning {base_path} for files...")
+
+    valid_files = []
     handlers = {
         ".pdf": process_pdf,
         ".docx": process_docx,
@@ -123,53 +138,52 @@ def load_documents(directory_path: str = settings.DATA_DIR) -> List[Dict[str, st
         ".jpeg": process_image
     }
 
-    print(f"\n📂 Recursively scanning {base_path} for files...")
-
-    # rglob('*') finds ALL files recursively
+    # Recursive search
     for file_path in base_path.rglob('*'):
         if file_path.is_file() and file_path.suffix.lower() in handlers:
+            valid_files.append(file_path)
 
-            try:
-                # 1. Determine Category based on folder structure
-                # If file is in "data/HR", category is "HR"
-                # If file is directly in "data/", category is "general"
-                parent_folder = file_path.parent
+    if not valid_files:
+        print("⚠️  No supported files found.")
+        return []
 
-                if parent_folder.resolve() == base_path.resolve():
-                    category = "general"
-                else:
-                    category = parent_folder.name  # e.g., "HR", "Finance"
+    print(f"✅ Found {len(valid_files)} files to process.")
 
-                # 2. Process the file
-                handler = handlers[file_path.suffix.lower()]
-                content = handler(str(file_path))
+    # 2. Process files with Progress Bar
+    # tqdm(valid_files) creates the visual loading bar
+    for file_path in tqdm(valid_files, desc="📄 Processing Files", unit="file"):
+        try:
+            # Determine Category
+            parent_folder = file_path.parent
+            if parent_folder.resolve() == base_path.resolve():
+                category = "general"
+            else:
+                category = parent_folder.name
 
-                if content and len(content.strip()) > 0:
-                    filename = file_path.name
-                    print(f"   Processing: {category}/{filename}")
+                # Process Content
+            handler = handlers[file_path.suffix.lower()]
+            content = handler(str(file_path))
 
-                    raw_documents.append({
-                        "id": filename,
-                        "title": file_path.stem.replace("_", " ").title(),  # Clean title
-                        "content": content,
-                        "category": category,  # <--- Dynamic Category
-                        "source_doc": filename
-                    })
-                else:
-                    print(f"   ⚠️  Skipping empty file: {file_path.name}")
+            if content and len(content.strip()) > 0:
+                raw_documents.append({
+                    "id": file_path.name,
+                    "title": file_path.stem.replace("_", " ").title(),
+                    "content": content,
+                    "category": category,
+                    "source_doc": file_path.name
+                })
+        except Exception as e:
+            # Use tqdm.write so it doesn't break the progress bar visual
+            tqdm.write(f"❌ Error processing {file_path.name}: {e}")
 
-            except Exception as e:
-                print(f"   ❌ Error processing {file_path.name}: {e}")
-
-    print(f"✅ Loaded {len(raw_documents)} documents from {len(set(d['category'] for d in raw_documents))} categories.")
     return raw_documents
 
+
 # ========================================
-# CHUNKING (Standard)
+# CHUNKING & DEDUPLICATION
 # ========================================
 
 def split_documents(documents: List[Dict[str, str]]) -> List[Dict[str, Any]]:
-    # Standard chunking logic (Same as before)
     if not documents:
         return []
 
@@ -181,9 +195,26 @@ def split_documents(documents: List[Dict[str, str]]) -> List[Dict[str, Any]]:
     )
 
     all_chunks = []
-    for doc in documents:
+    seen_hashes = set()  # <--- Memory of what we've already seen
+    duplicates_removed = 0
+
+    print(f"\n✂️  Chunking & Deduplicating {len(documents)} documents...")
+
+    for doc in tqdm(documents, desc="🧩 Splitting Chunks", unit="doc"):
         chunks = text_splitter.split_text(doc["content"])
+
         for i, chunk_text in enumerate(chunks):
+            # Generate Hash
+            chunk_hash = generate_chunk_hash(chunk_text)
+
+            # Check for duplicate
+            if chunk_hash in seen_hashes:
+                duplicates_removed += 1
+                continue  # Skip this chunk!
+
+            # If new, add to set and list
+            seen_hashes.add(chunk_hash)
+
             all_chunks.append({
                 "id": f"{doc['id']}_chunk_{i}",
                 "title": doc.get("title", "Untitled"),
@@ -192,7 +223,10 @@ def split_documents(documents: List[Dict[str, str]]) -> List[Dict[str, Any]]:
                 "source_doc": doc.get("source_doc", "unknown")
             })
 
-    print(f"✅ Generated {len(all_chunks)} chunks from {len(documents)} files.")
+    print(f"✅ Generated {len(all_chunks)} unique chunks.")
+    if duplicates_removed > 0:
+        print(f"🗑️  Removed {duplicates_removed} duplicate chunks (e.g. from scanned/text versions).")
+
     return all_chunks
 
 
