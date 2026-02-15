@@ -1,8 +1,8 @@
 # ✨ AI MAGIC - Local RAG System for PolicyCopiloting
 
-A private, secure, and local Retrieval-Augmented Generation (RAG) system designed to answer questions about internal company documents using AI. 
+A private, secure, and fully local Retrieval-Augmented Generation (RAG) system designed to answer questions about internal company documents using AI.
 
-This project runs entirely on your local machine using **Ollama** (for LLMs) and **ChromaDB** (for vector storage), ensuring no data leaves the company network.
+This project runs **entirely offline** on your local machine using **llama-cpp-python** (for embedded LLMs), **ChromaDB** (for vector storage), and **RapidOCR** (for document vision), ensuring no data leaves the company network.
 
 ---
 
@@ -22,13 +22,14 @@ This project runs entirely on your local machine using **Ollama** (for LLMs) and
 
 ## 🔎 Project Overview
 
-**TechCorp PolicyCopilot** allows employees to ask questions in natural language about company policies (PDFs/TXTs) and receive accurate, sourced answers.
+**TechCorp PolicyCopilot** allows employees to ask questions in natural language about company policies (PDFs, DOCX, TXT, Images) and receive accurate, sourced answers.
 
 **Key Features:**
-- **Local & Private:** Uses local LLMs (Llama 3, Mistral) via Ollama.
-- **Persistent Memory:** Vector embeddings are stored on disk (ChromaDB) so you don't have to reload documents every run.
-- **Source Citations:** Every answer cites the specific document chunk used.
-- **Modular Design:** Easy to swap out the LLM, Embedding Model, or Vector DB.
+- **Truly Local:** No external API dependencies. The LLM (Llama 3.2 3B) runs embedded inside the Python process.
+- **Smart Ingestion:** Recursively scans folders, assigns categories, and uses **RapidOCR** to read scanned PDFs and images.
+- **Deduplication:** Automatically detects and removes duplicate content using MD5 hashing.
+- **Hardware Optimized:** Auto-detects GPU (CUDA/Metal) and CPU threads for maximum performance.
+- **Performance Metrics:** Measures and displays generation time in milliseconds.
 
 ---
 
@@ -37,30 +38,27 @@ This project runs entirely on your local machine using **Ollama** (for LLMs) and
 The system is split into two distinct pipelines to ensure performance:
 
 1.  **Ingestion Pipeline (Offline):**
-    * Loads documents (`.txt`, `.pdf`) from the `data/` folder.
-    * Splits text into manageable chunks.
-    * Generates vector embeddings.
-    * Stores them in a persistent ChromaDB database on disk.
+    * **Recursive Scan:** Reads files from `data/` and its subfolders (folder name = category).
+    * **Universal Loading:** Processes `.txt`, `.pdf` (text & scanned), `.docx`, `.jpg`, `.png`.
+    * **Deduplication:** Hashes content to prevent storing duplicate chunks.
+    * **Storage:** Saves vector embeddings to a persistent ChromaDB on disk.
 
 2.  **Inference Pipeline (Online):**
-    * Takes user question.
-    * Searches the Vector DB for relevant chunks (Semantic Search).
-    * Augments the prompt with retrieved context.
-    * Generates a response using the Local LLM.
+    * **Semantic Search:** Queries ChromaDB using Cosine Similarity.
+    * **Context Augmentation:** Feeds relevant chunks to the embedded LLM.
+    * **Local Generation:** Uses `llama-cpp-python` (GGUF format) to generate answers locally.
 
 ---
 
 ## ⚙️ Prerequisites
 
-Before you begin, ensure you have the following installed:
+1.  **Python 3.10+**
+2.  **C++ Build Tools** (Required for hardware acceleration):
+    * **Windows:** Visual Studio Community (Desktop development with C++).
+    * **Mac:** Xcode Command Line Tools (`xcode-select --install`).
+    * **Linux:** `build-essential`.
 
-1.  **Python 3.12**
-2.  **[Ollama](https://ollama.com/)** (Running in the background)
-    * Install Ollama from the official website.
-    * Pull the model we are using:
-        ```bash
-        ollama pull llama3.2
-        ```
+*(Note: You do **NOT** need to install the Ollama desktop app anymore. The model runs directly in the script.)*
 
 ---
 
@@ -72,20 +70,35 @@ Before you begin, ensure you have the following installed:
     cd techcorp-policy-copilot
     ```
 
-2.  **Create a Virtual Environment (Recommended):**
+2.  **Create a Virtual Environment:**
     ```bash
     python -m venv venv
-    
-    # Windows
-    venv\Scripts\activate
-    
-    # Mac/Linux
-    source venv/bin/activate
+    # Windows: venv\Scripts\activate
+    # Mac/Linux: source venv/bin/activate
     ```
 
 3.  **Install Dependencies:**
+    * **Standard Install (CPU Only):**
+        ```bash
+        pip install -r requirements.txt
+        ```
+    * **GPU Acceleration (Recommended for Speed):**
+        * **NVIDIA (Windows/Linux):**
+            ```bash
+            # PowerShell
+            $env:CMAKE_ARGS="-DGGML_CUDA=on"; pip install llama-cpp-python --force-reinstall --no-cache-dir
+            pip install -r requirements.txt
+            ```
+        * **Mac (M1/M2/M3):**
+            ```bash
+            CMAKE_ARGS="-DGGML_METAL=on" pip install llama-cpp-python --force-reinstall --no-cache-dir
+            pip install -r requirements.txt
+            ```
+
+4.  **Download Models:**
+    Run this script once to fetch the Embedding model (SentenceTransformers) and the LLM (Llama 3.2 GGUF).
     ```bash
-    pip install -r requirements.txt
+    python download_models.py
     ```
 
 ---
@@ -93,39 +106,44 @@ Before you begin, ensure you have the following installed:
 ## 🚀 Usage Guide
 
 ### 1. Data Ingestion (Setup)
-*Run this only when you add new documents.*
+*Run this when you add new documents.*
 
-1.  Place your PDF or TXT files in the `data/` folder.
+1.  Place your files in the `data/` folder. You can create subfolders (e.g., `data/HR`, `data/IT`) to automatically categorize documents.
 2.  Run the ingestion script:
     ```bash
     python ingest_data.py
     ```
-    *This will create a `chroma_db_data/` folder. Do not delete this folder unless you want to reset the database.*
+    * *Features: Recursive scan, OCR for images/scans, Progress bars, Deduplication.*
+    * *Creates a `chroma_db_data/` folder.*
 
 ### 2. Running the Chat App
-*Run this whenever you want to chat.*
+*Run this to start chatting.*
 
 1.  Start the application:
     ```bash
     python main_app.py
     ```
-2.  Ask questions like:
+2.  The app will load the Llama 3.2 model into RAM/VRAM.
+3.  Ask questions like:
     > "What is the remote work policy?"
-    > "How much can I spend on travel meals?"
+    > "How do I claim travel expenses?"
 
 ---
 
 ## 🔧 Configuration
 
-All settings are centralized in `rag_system/config/settings.py`. You can modify:
+All settings are in `rag_system/config/settings.py`.
 
 | Setting | Description | Default |
 | :--- | :--- | :--- |
-| `LLM_MODEL_NAME` | The Ollama model to use | `llama3.2` |
-| `EMBEDDING_MODEL` | The HuggingFace model for vectors | `all-MiniLM-L6-v2` |
-| `CHUNK_SIZE` | Size of text chunks (in chars) | `1000` |
+| `LLM_REPO_ID` | HuggingFace Repo for GGUF model | `bartowski/Llama-3.2-3B...` |
+| `EMBEDDING_MODEL` | Vector Model | `all-MiniLM-L6-v2` |
+| `DISTANCE_METRIC` | Similarity math (`cosine`, `l2`) | `cosine` |
+| `CHUNK_SIZE` | Text chunk size | `1000` |
+| `CONTEXT_WINDOW` | LLM Memory (Tokens) | `4096` |
+| `DEVICE` | OCR Processing Device | `cuda` (if available) |
 
-**Note:** If you change `CHUNK_SIZE`, `EMBEDDING_MODEL`, you must delete the `chroma_db_data` folder and re-run `python ingest_data.py`.
+**Important:** If you change `CHUNK_SIZE`, `DISTANCE_METRIC`, or `EMBEDDING_MODEL`, you must delete the `chroma_db_data` folder and re-run ingestion.
 
 ---
 
@@ -135,17 +153,19 @@ All settings are centralized in `rag_system/config/settings.py`. You can modify:
 rag_system/
 │
 ├── config/
-│   └── settings.py       # Central configuration (Models, Paths, Constants)
+│   └── settings.py       # Central configuration
 │
 ├── core/
-│   ├── ingestion.py      # Logic for loading & chunking docs
-│   ├── database.py       # ChromaDB connection & storage logic
-│   ├── retrieval.py      # Embedding generation logic
-│   └── generation.py     # Ollama LLM interaction logic
+│   ├── ingestion.py      # Recursive loader, OCR, Deduplication, Chunking
+│   ├── database.py       # Persistent Vector DB (Chroma)
+│   ├── retrieval.py      # Embedding generation
+│   └── generation.py     # Llama-CPP (GGUF) Engine
 │
-├── data/                 # DROP YOUR DOCUMENTS HERE
-├── chroma_db_data/       # (Generated) Persistent Vector Database
+├── data/                 # Documents (PDF, DOCX, IMG, TXT)
+├── models/               # Local Model Files (Downloaded via script)
+├── chroma_db_data/       # Vector Database Storage
 │
-├── ingest_data.py        # Script: Run to process documents
-├── main_app.py           # Script: Run to start chatting
-└── requirements.txt      # Python dependencies
+├── download_models.py    # Setup script to fetch AI models
+├── ingest_data.py        # ETL Pipeline Script
+├── main_app.py           # Chat Interface Script
+└── requirements.txt      # Dependencies
