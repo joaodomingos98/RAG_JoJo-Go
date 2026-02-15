@@ -41,7 +41,7 @@ LLM_TEMPERATURE = 0.1
 # DATABASE CONFIGURATION
 # =============================================================================
 COLLECTION_NAME = "ecoativo_docs"
-VECTOR_SEARCH_TOP_K = 3
+VECTOR_SEARCH_TOP_K = 5
 
 # =============================================================================
 # CHUNKING CONFIGURATION

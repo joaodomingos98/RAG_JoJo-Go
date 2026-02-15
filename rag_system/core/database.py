@@ -41,7 +41,7 @@ def store_chunks_in_db(chunks: List[Dict]):
 # VECTOR SEARCH (Read)
 # ========================================
 
-def search_vector_database(query_embedding: List[float], top_k: int = settings.VECTOR_SEARCH_TOP_K):
+def search_vector_database(query_embedding: List[float]):
     """
     Search vector database for relevant document chunks.
     Note: We don't pass 'collection' in; we load it here.
@@ -49,6 +49,8 @@ def search_vector_database(query_embedding: List[float], top_k: int = settings.V
 
     print("\n🔍 SECTION: VECTOR SEARCH")
     print("=" * 50)
+
+    top_k = settings.VECTOR_SEARCH_TOP_K
 
     # Re-connect to the SAME persistent DB
     client = get_db_client()
