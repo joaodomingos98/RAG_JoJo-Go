@@ -82,7 +82,6 @@ def process_docx(file_path: str) -> str:
         print(f"❌ Error reading Word doc: {e}")
         return ""
 
-
 def process_image(file_path: str) -> str:
     """Extracts text from direct image files (JPG, PNG)."""
     try:
