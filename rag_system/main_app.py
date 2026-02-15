@@ -1,4 +1,5 @@
 import sys
+import time
 from core.database import search_vector_database
 from core.retrieval import process_user_query
 from core.generation import augment_prompt_with_context, generate_response
@@ -15,6 +16,9 @@ def run_rag_pipeline(query: str):
     print(f"\n❓ User Question: {query}")
     print("-" * 60)
 
+    # Start the timer
+    start_time = time.perf_counter()
+
     # Step 1: Process User Query (Generate Embedding)
     # We assume process_user_query returns (model, embedding_list)
     query_embedding = process_user_query(query)
@@ -22,7 +26,7 @@ def run_rag_pipeline(query: str):
     # Step 2: Search Vector Database
     # Note: We do NOT pass a 'collection' object anymore.
     # The function connects to the persistent DB automatically.
-    search_results = search_vector_database(query_embedding, top_k=3)
+    search_results = search_vector_database(query_embedding)
 
     if not search_results:
         print("❌ No relevant information found in the database.")
@@ -34,8 +38,16 @@ def run_rag_pipeline(query: str):
     # Step 4: Generate Response (using Ollama)
     response = generate_response(augmented_prompt)
 
+    # Stop the timer
+    end_time = time.perf_counter()
+
+    # Calculate duration in seconds
+    elapsed_time_s = (end_time - start_time)
+
     print("\n🤖 AI Answer:")
     print(response)
+    print("-" * 60)
+    print(f"⏱️  Answer generated in {elapsed_time_s:.4f} s")
 
     return response
 
