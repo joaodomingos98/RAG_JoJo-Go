@@ -22,7 +22,7 @@ This project runs **entirely offline** on your local machine using **llama-cpp-p
 
 ## 🔎 Project Overview
 
-**TechCorp PolicyCopilot** allows employees to ask questions in natural language about company policies (PDFs, DOCX, TXT, Images) and receive accurate, sourced answers.
+**PolicyCopilot** allows employees to ask questions in natural language about company policies (PDFs, DOCX, TXT, Images) and receive accurate, sourced answers.
 
 **Key Features:**
 - **Truly Local:** No external API dependencies. The LLM (Llama 3.2 3B) runs embedded inside the Python process.
