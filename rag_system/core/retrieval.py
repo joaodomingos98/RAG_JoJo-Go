@@ -1,15 +1,30 @@
 from sentence_transformers import SentenceTransformer
 import numpy as np
+import os
 from typing import List
-from config import settings  # <--- IMPORT SETTINGS
+from config import settings
 
 _EMBEDDING_MODEL = None
 
+
 def get_embedding_model():
     global _EMBEDDING_MODEL
+
     if _EMBEDDING_MODEL is None:
-        print(f"⚙️  Loading embedding model: {settings.EMBEDDING_MODEL_NAME}...")
-        _EMBEDDING_MODEL = SentenceTransformer(settings.EMBEDDING_MODEL_NAME)
+        # Check if local model exists
+        if os.path.exists(settings.LOCAL_EMBEDDING_PATH):
+            print(f"⚙️  Loading local embedding model from: {settings.LOCAL_EMBEDDING_PATH}")
+            # Load from the local directory
+            _EMBEDDING_MODEL = SentenceTransformer(str(settings.LOCAL_EMBEDDING_PATH))
+        else:
+            # Fallback: Download from internet if local files are missing
+            print(f"⚠️  Local model not found at {settings.LOCAL_EMBEDDING_PATH}")
+            print(f"⚙️  Downloading and loading from HuggingFace: {settings.EMBEDDING_MODEL_NAME}...")
+            _EMBEDDING_MODEL = SentenceTransformer(settings.EMBEDDING_MODEL_NAME)
+
+            # Auto-save it locally for next time
+            _EMBEDDING_MODEL.save(str(settings.LOCAL_EMBEDDING_PATH))
+
     return _EMBEDDING_MODEL
 
 # ========================================

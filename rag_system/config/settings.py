@@ -1,5 +1,3 @@
-# TODO: UPDATE ALL RELEvANT FILES
-
 import os
 from pathlib import Path
 
@@ -18,18 +16,26 @@ CHROMA_DB_DIR = BASE_DIR / "chroma_db_data"
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 CHROMA_DB_DIR.mkdir(parents=True, exist_ok=True)
 
+# AI Models directory
+MODELS_DIR = BASE_DIR / "models"
+MODELS_DIR.mkdir(parents=True, exist_ok=True)
 
 # =============================================================================
 # MODEL CONFIGURATION
 # =============================================================================
-# Embedding Model (HuggingFace / SentenceTransformers)
+# 1. EMBEDDING MODEL (SentenceTransformers)
 EMBEDDING_MODEL_NAME = "all-MiniLM-L6-v2"
-# EMBEDDING_MODEL_NAME = "all-mpnet-base-v2" # Better quality, slower
+LOCAL_EMBEDDING_PATH = MODELS_DIR / EMBEDDING_MODEL_NAME
 
-# LLM Model (Ollama)
-LLM_MODEL_NAME = "llama3.2"
-LLM_TEMPERATURE = 0.1  # Low temperature = more factual/deterministic
+# 2. LOCAL LLM (Llama 3.2 GGUF)
+# We use the 3B parameter model, Q4_K_M quantization (Balanced quality/speed)
+LLM_REPO_ID = "bartowski/Llama-3.2-3B-Instruct-GGUF"
+LLM_FILENAME = "Llama-3.2-3B-Instruct-Q4_K_M.gguf"
+LOCAL_LLM_PATH = MODELS_DIR / LLM_FILENAME
 
+# LlamaCPP Settings
+CONTEXT_WINDOW = 8192  # Llama 3.2 supports up to 128k, but 8k is safe for local RAM
+LLM_TEMPERATURE = 0.1
 
 # =============================================================================
 # DATABASE CONFIGURATION

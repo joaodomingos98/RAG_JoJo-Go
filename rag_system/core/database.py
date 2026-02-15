@@ -1,7 +1,7 @@
 import chromadb
 import os
 from typing import List, Dict, Any
-from config import settings  # <--- IMPORT SETTINGS
+from config import settings
 
 
 def get_db_client():
@@ -16,7 +16,7 @@ def get_db_client():
 def get_collection(client):
     """Gets collection using name from settings."""
     return client.get_or_create_collection(
-        name=settings.COLLECTION_NAME,  # <--- FROM SETTINGS
+        name=settings.COLLECTION_NAME,
         metadata={"hnsw:space": "cosine"}
     )
 
