@@ -32,7 +32,7 @@ def store_chunks_in_db(chunks: List[Dict]):
 
     ids = [chunk["id"] for chunk in chunks]
     documents = [chunk["content"] for chunk in chunks]
-    metadatas = [{"title": c["title"], "source": c["source_doc"]} for c in chunks]
+    metadatas = [{"title": c["title"], "source": c["source_doc"], "category":c["category"]} for c in chunks]
 
     collection.upsert(ids=ids, documents=documents, metadatas=metadatas)
     print(f"✅  Stored {len(ids)} chunks in '{settings.COLLECTION_NAME}'")

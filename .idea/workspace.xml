@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bd2cea8c-c9c3-40d5-9c1f-b851620ed597" name="Changes" comment="counts number of s answer took to generate" />
+    <list default="true" id="bd2cea8c-c9c3-40d5-9c1f-b851620ed597" name="Changes" comment="counts number of s answer took to generate">
+      <change afterPath="$PROJECT_DIR$/rag_system/ui_app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rag_system/core/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/rag_system/core/database.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rag_system/main_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/rag_system/main_app.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -18,6 +23,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="categories" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -254,7 +264,8 @@
     <MESSAGE value="dowloading models locally" />
     <MESSAGE value="loads all documents (img, pdf, doc) in data folder to vector database" />
     <MESSAGE value="counts number of s answer took to generate" />
-    <option name="LAST_COMMIT_MESSAGE" value="counts number of s answer took to generate" />
+    <MESSAGE value="Added dynamic category extraction and routing" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added dynamic category extraction and routing" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

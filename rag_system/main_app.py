@@ -30,7 +30,7 @@ def run_rag_pipeline(query: str):
 
     if not search_results:
         print("❌ No relevant information found in the database.")
-        return "I couldn't find any information about that in the policy documents."
+        return "I couldn't find any information about that in the policy documents.", []
 
     # Step 3: Augment Prompt
     augmented_prompt = augment_prompt_with_context(query, search_results)
@@ -49,7 +49,7 @@ def run_rag_pipeline(query: str):
     print("-" * 60)
     print(f"⏱️  Answer generated in {elapsed_time_s:.4f} s")
 
-    return response
+    return response, search_results
 
 
 # ========================================
