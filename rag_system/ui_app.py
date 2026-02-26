@@ -5,12 +5,12 @@ from main_app import run_rag_pipeline
 # STREAMLIT PAGE CONFIGURATION
 # ========================================
 st.set_page_config(
-    page_title="AI MAGIC",
-    page_icon="✨",
+    page_title="JoJo-Go",
+    page_icon="⚡",
     layout="centered"
 )
 
-st.title("✨ AI MAGIC")
+st.title("⚡ JoJo-Go")
 st.caption("Ask questions about company policies, HR, IT, and more.")
 
 # ========================================
@@ -20,9 +20,9 @@ st.caption("Ask questions about company policies, HR, IT, and more.")
 if "messages" not in st.session_state:
     st.session_state.messages = [
         {
-            "role": "Policy Copilot",
+            "role": "Information Retrieval Copilot",
             "avatar": "🤖",
-            "content": "Hello! I am your AI policy assistant. How can I help you today?",
+            "content": "Hello! I am your AI information retrieval assistant. How can I help you today?",
             "citations": []
         }
     ]
@@ -54,7 +54,7 @@ if prompt := st.chat_input("📝 Type your question here..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
 
     # Set the AI MAGIC custom role and emoji
-    with st.chat_message("Policy Copilot", avatar="🤖"):
+    with st.chat_message("Information Retrieval Copilot", avatar="🤖"):
 
         # Stop Generation Button
         # If clicked while the app is running, Streamlit halts and re-runs the script
@@ -79,8 +79,8 @@ if prompt := st.chat_input("📝 Type your question here..."):
 
     # Save the AI's response and citations to memory
     st.session_state.messages.append({
-        "role": "AI MAGIC",
-        "avatar": "✨",
+        "role": "JoJo-Go",
+        "avatar": "⚡",
         "content": response,
         "citations": search_results
     })
@@ -95,9 +95,9 @@ with st.sidebar:
     if st.button("🗑️ Clear Chat History"):
         st.session_state.messages = [
             {
-                "role": "Policy Copilot",
+                "role": "Information Retrieval Copilot",
                 "avatar": "🤖",
-                "content": "Hello! I am your AI policy assistant. How can I help you today?",
+                "content": "Hello! I am your AI information retrieval assistant. How can I help you today?",
                 "citations": []
             }
         ]

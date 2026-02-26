@@ -119,6 +119,9 @@ def generate_response(augmented_prompt: str) -> str:
 
     llm = get_llm_engine()
 
+    # Wipe the internal KV Cache/State before the new query (This guarantees the context window starts at 0 tokens for every question)
+    llm.reset()
+
     # Create chat completion (OpenAI-compatible format)
     output = llm.create_chat_completion(
         messages=[

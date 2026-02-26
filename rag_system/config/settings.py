@@ -29,8 +29,8 @@ LOCAL_EMBEDDING_PATH = MODELS_DIR / EMBEDDING_MODEL_NAME
 
 # 2. LOCAL LLM (Llama 3.2 GGUF)
 # We use the 3B parameter model, Q4_K_M quantization (Balanced quality/speed)
-LLM_REPO_ID = "bartowski/Llama-3.2-3B-Instruct-GGUF"
-LLM_FILENAME = "Llama-3.2-3B-Instruct-Q4_K_M.gguf"
+LLM_REPO_ID = "LiquidAI/LFM2-1.2B-RAG-GGUF"
+LLM_FILENAME = "LFM2-1.2B-RAG-Q4_K_M.gguf"
 LOCAL_LLM_PATH = MODELS_DIR / LLM_FILENAME
 
 # LlamaCPP Settings

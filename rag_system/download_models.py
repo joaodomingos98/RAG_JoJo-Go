@@ -20,7 +20,7 @@ def download_embedding_model():
 
 def download_llm_model():
     """Downloads the Llama 3.2 GGUF model for text generation."""
-    print(f"\n⬇️  Step 2/2: Downloading Llama 3.2 Model ({settings.LLM_FILENAME})...")
+    print(f"\n⬇️  Step 2/2: Downloading {settings.LLM_FILENAME} Model ({settings.LLM_FILENAME})...")
     print(f"    Source: HuggingFace ({settings.LLM_REPO_ID})")
 
     if os.path.exists(settings.LOCAL_LLM_PATH):
@@ -35,7 +35,7 @@ def download_llm_model():
             local_dir=settings.MODELS_DIR,
             local_dir_use_symlinks=False  # Ensure we get the actual file, not a symlink
         )
-        print(f"🎉  Saved Llama 3.2 model to: {settings.LOCAL_LLM_PATH}")
+        print(f"🎉  Saved {settings.LLM_FILENAME} model to: {settings.LOCAL_LLM_PATH}")
     except Exception as e:
         print(f"❌  Error downloading LLM: {e}")
         print("    Tip: Check your internet connection or install: pip install huggingface_hub")
