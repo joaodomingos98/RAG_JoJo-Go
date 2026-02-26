@@ -1,12 +1,33 @@
-chromadb
-sentence-transformers
+# ==========================================
+# CORE AI & DATABASE
+# ==========================================
+llama-cpp-python        # Local LLM engine (GGUF)
+chromadb                # Vector database
+sentence-transformers   # Embedding models
+
+# ==========================================
+# WEB UI
+# ==========================================
+streamlit               # Frontend chat interface
+
+# ==========================================
+# DATA INGESTION & CHUNKING
+# ==========================================
 langchain-text-splitters
-python==3.12
-llama-cpp-python
-tqdm
-huggingface_hub # Downloading models
-pypdf
-pymupdf         # Fast PDF handling
-python-docx     # Word Docs
-pillow          # Image processing
-rapidocr-onnxruntime #lightweight OCR model
+langchain-experimental  # Semantic Chunking (SemanticChunker)
+langchain-huggingface   # HuggingFace embedding integration
+
+# ==========================================
+# FILE PROCESSING & OCR
+# ==========================================
+pymupdf                 # Fast PDF handling (fitz)
+pypdf                   # PDF parsing backup
+python-docx             # Word Docs (.docx)
+pillow                  # Image processing
+rapidocr-onnxruntime    # Lightweight OCR model for scanned pages
+
+# ==========================================
+# UTILITIES
+# ==========================================
+tqdm                    # Terminal progress bars
+huggingface_hub         # Downloading models programmatically
