@@ -4,13 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bd2cea8c-c9c3-40d5-9c1f-b851620ed597" name="Changes" comment="cleaned up">
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+    <list default="true" id="bd2cea8c-c9c3-40d5-9c1f-b851620ed597" name="Changes" comment="updated">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rag_system/config/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/rag_system/config/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rag_system/core/generation.py" beforeDir="false" afterPath="$PROJECT_DIR$/rag_system/core/generation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rag_system/download_models.py" beforeDir="false" afterPath="$PROJECT_DIR$/rag_system/download_models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rag_system/ui_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/rag_system/ui_app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rag_system/core/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/rag_system/core/database.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rag_system/core/ingestion.py" beforeDir="false" afterPath="$PROJECT_DIR$/rag_system/core/ingestion.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,7 +80,7 @@
       <recent name="C:\Users\User\PyCharmProjects\AI_MAGIC\rag_system" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.ui_app">
+  <component name="RunManager" selected="Python.main_app">
     <configuration name="main_app" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="JoJo-Go" />
       <option name="ENV_FILES" value="" />
@@ -151,9 +149,9 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.ui_app" />
         <item itemvalue="Python.main_app" />
         <item itemvalue="Python.main_ingest" />
+        <item itemvalue="Python.ui_app" />
       </list>
     </recent_temporary>
   </component>
@@ -300,7 +298,31 @@
       <option name="project" value="LOCAL" />
       <updated>1772094524958</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Integrated sLLM model fine-tuned to RAG  (answers are now between 20 and 25s)">
+      <option name="closed" value="true" />
+      <created>1772097961557</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1772097961557</updated>
+    </task>
+    <task id="LOCAL-00018" summary="updated, organized and cleaned">
+      <option name="closed" value="true" />
+      <created>1772099106536</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1772099106536</updated>
+    </task>
+    <task id="LOCAL-00019" summary="updated">
+      <option name="closed" value="true" />
+      <created>1772100115646</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1772100115646</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -329,7 +351,10 @@
     <MESSAGE value="UI integration" />
     <MESSAGE value="name changes" />
     <MESSAGE value="cleaned up" />
-    <option name="LAST_COMMIT_MESSAGE" value="cleaned up" />
+    <MESSAGE value="Integrated sLLM model fine-tuned to RAG  (answers are now between 20 and 25s)" />
+    <MESSAGE value="updated, organized and cleaned" />
+    <MESSAGE value="updated" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

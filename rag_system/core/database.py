@@ -17,7 +17,7 @@ def get_collection(client):
     """Gets collection using name from settings."""
     return client.get_or_create_collection(
         name=settings.COLLECTION_NAME,
-        metadata={"hnsw:space": "cosine"}
+        metadata={"hnsw:space": settings.DISTANCE_METRIC}
     )
 
 

@@ -10,6 +10,8 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from rapidocr_onnxruntime import RapidOCR
 from tqdm import tqdm
 from config import settings
+from langchain_experimental.text_splitter import SemanticChunker
+from langchain_huggingface import HuggingFaceEmbeddings
 
 # Initialize OCR Engine once (It's very fast to load)
 # detach_model=True saves memory by unloading model after use if needed,
@@ -187,21 +189,39 @@ def split_documents(documents: List[Dict[str, str]]) -> List[Dict[str, Any]]:
     if not documents:
         return []
 
-    text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=settings.CHUNK_SIZE,
-        chunk_overlap=settings.CHUNK_OVERLAP,
-        length_function=len,
-        separators=["\n\n", "\n", ". ", " ", ""]
+    print("\n🧠 Initializing Semantic Chunker (Loading Embedding Model)...")
+
+    # 1. Point LangChain to your local embedding model
+    # (Falls back to downloading if the local path doesn't exist yet)
+    model_path = str(
+        settings.LOCAL_EMBEDDING_PATH) if settings.LOCAL_EMBEDDING_PATH.exists() else settings.EMBEDDING_MODEL_NAME
+    hf_embeddings = HuggingFaceEmbeddings(model_name=model_path)
+
+    # 2. Configure the Semantic Chunker
+    # "percentile" at 90 means: Split the chunk when the difference in meaning
+    # between two sentences is in the top 10% of all differences in the document.
+    text_splitter = SemanticChunker(
+        hf_embeddings,
+        breakpoint_threshold_type= settings.CHUNKING_TYPE,
+        breakpoint_threshold_amount=settings.CHUNKING_THRESHOLD
     )
 
     all_chunks = []
     seen_hashes = set()
     duplicates_removed = 0
 
-    print(f"\n✂️  Chunking & Deduplicating {len(documents)} documents...")
+    print(f"\n✂️  Semantic Chunking & Deduplicating {len(documents)} documents...")
+    print("⏳ Note: Semantic chunking is slower than basic chunking because it runs AI inference on every sentence.")
 
     for doc in tqdm(documents, desc="🧩 Splitting Chunks", unit="doc"):
-        chunks = text_splitter.split_text(doc["content"])
+        # The text_splitter creates documents based on semantic meaning
+        try:
+            # SemanticChunker expects create_documents rather than split_text
+            langchain_docs = text_splitter.create_documents([doc["content"]])
+            chunks = [c.page_content for c in langchain_docs]
+        except Exception as e:
+            tqdm.write(f"⚠️ Error semantically chunking {doc['id']}: {e}. Skipping.")
+            continue
 
         for i, chunk_text in enumerate(chunks):
             # Generate Hash
@@ -210,9 +230,9 @@ def split_documents(documents: List[Dict[str, str]]) -> List[Dict[str, Any]]:
             # Check for duplicate
             if chunk_hash in seen_hashes:
                 duplicates_removed += 1
-                continue  # Skip this chunk!
+                continue
 
-            # If new, add to set and list
+                # If new, add to set and list
             seen_hashes.add(chunk_hash)
 
             all_chunks.append({
@@ -223,9 +243,9 @@ def split_documents(documents: List[Dict[str, str]]) -> List[Dict[str, Any]]:
                 "source_doc": doc.get("source_doc", "unknown")
             })
 
-    print(f"✅ Generated {len(all_chunks)} unique chunks.")
+    print(f"✅ Generated {len(all_chunks)} unique semantic chunks.")
     if duplicates_removed > 0:
-        print(f"🗑️  Removed {duplicates_removed} duplicate chunks (e.g. from scanned/text versions).")
+        print(f"🗑️  Removed {duplicates_removed} duplicate chunks.")
 
     return all_chunks
 

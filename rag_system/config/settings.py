@@ -44,14 +44,20 @@ COLLECTION_NAME = "ecoativo_docs"
 VECTOR_SEARCH_TOP_K = 5
 
 # =============================================================================
-# CHUNKING CONFIGURATION
+# SEMANTIC CHUNKING CONFIGURATION
+# =============================================================================
+CHUNKING_TYPE = "percentile"
+# Options: "90" (Best for policy documents and manuals), "75"  (Best for FAQs, lists, or glossaries)
+CHUNKING_THRESHOLD = 90
+
+# =============================================================================
+# ❗OLD CHUNKING CONFIGURATION
 # =============================================================================
 CHUNK_SIZE = 1000
 CHUNK_OVERLAP = 200
 
 # =============================================================================
-#❗NOT IMPLEMENTED (requires altering search function)❗
 # Distance Metric Configuration
 # =============================================================================
-# D - Options: "cosine" (Default for text), "l2" (Euclidean), "ip" (Inner Product)
+# Options: "cosine" (Default for text), "l2" (Euclidean), "ip" (Inner Product)
 DISTANCE_METRIC = "cosine"
