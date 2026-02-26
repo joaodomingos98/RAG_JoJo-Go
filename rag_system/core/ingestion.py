@@ -195,7 +195,7 @@ def split_documents(documents: List[Dict[str, str]]) -> List[Dict[str, Any]]:
     )
 
     all_chunks = []
-    seen_hashes = set()  # <--- Memory of what we've already seen
+    seen_hashes = set()
     duplicates_removed = 0
 
     print(f"\n✂️  Chunking & Deduplicating {len(documents)} documents...")
