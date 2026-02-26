@@ -1,20 +1,3 @@
-Ah, that is a classic data engineering terminology mix-up!
-
-When the README says **"Online"** and **"Offline"**, it has **nothing to do with the internet**. Your system is 100% local, private, and disconnected from the web.
-
-In system architecture:
-
-* **"Offline Pipeline"** means **"Batch Processing"**: It runs in the background before the user needs it (like your ingestion script).
-* **"Online Pipeline"** means **"Real-Time/Live"**: It happens at the exact moment the user is interacting with the app, while they wait for a response.
-
-To avoid this exact confusion, we should absolutely rename those headers in the README to "Background Setup" and "Real-Time Chat".
-
-You are also completely right about the **Query Routing**—since you checked out the `main` branch and left the dynamic categories on your `categories` branch, that feature isn't in your current codebase!
-
-Here is the corrected README that matches exactly what you have right now: 100% local, semantic chunking, Streamlit UI, and no query routing.
-
----
-
 # ⚡ JoJo-GO - Local RAG System
 
 A private, secure, and fully local Retrieval-Augmented Generation (RAG) system designed to answer questions about internal company documents using AI.
