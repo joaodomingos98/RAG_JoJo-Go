@@ -1,4 +1,4 @@
-# ⚡ JoJo-GO - Local RAG System
+# JoJo-GO - Local RAG System
 
 A private, secure, and fully local Retrieval-Augmented Generation (RAG) system designed to answer questions about internal company documents using AI.
 
@@ -6,7 +6,7 @@ This project runs **entirely offline** on your local machine using **llama-cpp-p
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 * [Project Overview](https://www.google.com/search?q=%23-project-overview)
 * [Architecture](https://www.google.com/search?q=%23-architecture)
@@ -22,21 +22,21 @@ This project runs **entirely offline** on your local machine using **llama-cpp-p
 
 ---
 
-## 🔎 Project Overview
+## Project Overview
 
 **JoJo-GO** allows users to ask questions in natural language about internal documents (PDFs, DOCX, TXT, Images) and receive accurate, sourced answers via a modern web chat interface.
 
 **Key Features:**
 
-* **🖥️ Web UI:** A beautiful, interactive chat interface built with Streamlit, complete with real-time streaming and source document citations.
-* **🖥 Truly Local:** No external API dependencies. The LLM (**LiquidAI LFM2 1.2B RAG**) runs embedded inside the Python process.
-* **🧠 Semantic Chunking:** Uses AI to chunk documents intelligently based on shifts in meaning and context, rather than arbitrary character counts.
-* **📄 Smart Ingestion:** Recursively scans folders and uses **RapidOCR** to read scanned PDFs and images.
-* **✂️ Deduplication:** Automatically detects and removes duplicate content using MD5 hashing.
+* **Web UI:** A beautiful, interactive chat interface built with Streamlit, complete with real-time streaming and source document citations.
+* **Truly Local:** No external API dependencies. The LLM (**LiquidAI LFM2 1.2B RAG**) runs embedded inside the Python process.
+* **Semantic Chunking:** Uses AI to chunk documents intelligently based on shifts in meaning and context, rather than arbitrary character counts.
+* **Smart Ingestion:** Recursively scans folders and uses **RapidOCR** to read scanned PDFs and images.
+* **Deduplication:** Automatically detects and removes duplicate content using MD5 hashing.
 
 ---
 
-## 🏗 Architecture
+## Architecture
 
 The system is split into two distinct pipelines to ensure performance. **Both pipelines run 100% locally on your machine.**
 
@@ -58,7 +58,7 @@ The system is split into two distinct pipelines to ensure performance. **Both pi
 
 ---
 
-## ⚙️ Prerequisites
+## Prerequisites
 
 1. **Python 3.10+**
 2. **C++ Build Tools** (Required for hardware acceleration):
@@ -72,7 +72,7 @@ The system is split into two distinct pipelines to ensure performance. **Both pi
 
 ---
 
-## 📦 Installation
+## Installation
 
 1. **Clone the repository:**
 ```bash
@@ -118,7 +118,7 @@ pip install -r requirements.txt
 
 ---
 
-## 🚀 Usage Guide
+## Usage Guide
 
 ### 1. Data Ingestion (Setup)
 
@@ -158,7 +158,7 @@ streamlit run ui_app.py
 
 ---
 
-## 🔧 Configuration
+## Configuration
 
 All system settings are centralized in `config/settings.py`.
 
@@ -171,11 +171,11 @@ All system settings are centralized in `config/settings.py`.
 | `CHUNKING_THRESHOLD` | Threshold for semantic splits | `90` |
 | `CONTEXT_WINDOW` | LLM Memory (Tokens) | `8192` |
 
-**🛑 Important:** If you change `CHUNKING_TYPE`, `CHUNKING_THRESHOLD`, `DISTANCE_METRIC`, or `EMBEDDING_MODEL_NAME`, you must delete the `chroma_db_data` folder and re-run the ingestion script.
+**Important:** If you change `CHUNKING_TYPE`, `CHUNKING_THRESHOLD`, `DISTANCE_METRIC`, or `EMBEDDING_MODEL_NAME`, you must delete the `chroma_db_data` folder and re-run the ingestion script.
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```text
 rag_system/
