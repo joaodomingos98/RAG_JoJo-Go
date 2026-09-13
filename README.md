@@ -196,7 +196,7 @@ rag_system/
 ├── download_models.py    # Setup script to fetch AI models
 ├── main_ingest.py        # ETL Pipeline Script
 ├── main_app.py           # Terminal Interface & Core RAG Pipeline
-├── ui_app.py             # ✨ Streamlit Web Interface
+├── ui_app.py             # Streamlit Web Interface
 └── requirements.txt      # Dependencies
 
 ```
